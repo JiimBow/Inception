@@ -1,7 +1,8 @@
 services:
   mariadb:
-    image: mariadb:bookworm
     container_name: mariadb
+    build:
+      context: ./requirements/mariadb
     restart: always
     env_file:
       - .env
