@@ -40,3 +40,24 @@ if [ ! -f wp-config.php ]; then
 		--allow-root
 	echo "wp-config.php created."
 fi
+
+echo "Installing WordPress site..."
+
+cd /var/www/html
+
+if ! wp core is-installed --allow-root; then
+	wp core install \
+	--url="https://$DOMAIN_NAME" \
+	--title="Inception" \
+	--admin_user="$WP_ADMIN_USER" \
+	--admin_password="$WP_ADMIN_PASSWORD" \
+	--admin_email="$WP_ADMIN_EMAIL" \
+	--skip-email \
+	--allow-root
+
+	echo "WordPress installed."
+fi
+
+echo "Starting PHP-FPM..."
+
+exec php-fpm -F
