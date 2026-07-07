@@ -4,10 +4,11 @@ set -e
 
 echo "Starting WordPress setup..."
 
-until mysql -h mariadb -u root -p"$MYSQL_ROOT_PASSWORD" -e "SELECT 1;" > /dev/null 2>&1
+# Wait for mairadb
+until mysql -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SELECT 1;" > /dev/null 2>&1
 do
-	echo "Waiting for MariaDB..."
-	sleep 1
+    echo "Waiting for MariaDB..."
+    sleep 1
 done
 
 echo "MariaDB is ready!"
@@ -18,6 +19,7 @@ mkdir -p /var/www/html
 
 cd /var/www/html
 
+# Build wordpress
 if [ ! -f wp-load.php ]; then
 	curl -O https://wordpress.org/wordpress-6.8.2.tar.gz
 	tar -xzf wordpress-6.8.2.tar.gz --strip-components=1
@@ -30,6 +32,7 @@ echo "Creating wp-config.php..."
 
 cd /var/www/html
 
+# Configure wordpress from database
 if [ ! -f wp-config.php ]; then
 	wp config create \
 		--dbname="$MYSQL_DATABASE" \
@@ -58,6 +61,8 @@ if ! wp core is-installed --allow-root; then
 	echo "WordPress installed."
 fi
 
+chown -R www-data:www-data /var/www/html
+
 echo "Starting PHP-FPM..."
 
-exec php-fpm -F
+exec php-fpm8.2 -F

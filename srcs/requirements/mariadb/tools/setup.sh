@@ -1,15 +1,47 @@
 #!/bin/bash
 
-service mariadb start
+set -e
 
-mysql -e "CREATE DATABASE IF NOT EXISTS ${MYSQL_DATABASE};"
+echo "Initializing MariaDB..."
 
-mysql -e "CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';"
+# Create folder if needed
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
 
-mysql -e "GRANT ALL PRIVILEGES ON ${MYSQL_DATABASE}.* TO '${MYSQL_USER}'@'%';"
+# Run MariaDB temporarely
+mysqld_safe --datadir=/var/lib/mysql &
 
-mysql -e "FLUSH PRIVILEGES;"
+echo "Waiting for MariaDB..."
 
-mysqladmin -u root shutdown
+until mysqladmin ping --silent; do
+    sleep 1
+done
 
-exec mysqld_safe
+echo "MariaDB is ready."
+
+# Configure database and users
+mysql << EOF
+CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
+
+CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
+
+GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+EOF
+
+echo "Database configured."
+
+# Shut temporarely
+mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+
+echo "Starting MariaDB..."
+
+# Run mariadb
+exec mysqld_safe --datadir=/var/lib/mysql
