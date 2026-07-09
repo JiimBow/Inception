@@ -20,7 +20,7 @@ done
 echo "MariaDB is ready."
 
 # Configure database and users
-mysql << EOF
+mysql -u root -p"${MYSQL_ROOT_PASSWORD}" << EOF
 CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
 
 CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
