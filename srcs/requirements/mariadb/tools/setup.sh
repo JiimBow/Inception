@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 echo "Initializing MariaDB..."
 
 # Create folder if needed
@@ -38,10 +36,8 @@ EOF
 
 echo "Database configured."
 
-# Shut temporarely
 mysqladmin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
 
 echo "Starting MariaDB..."
 
-# Run mariadb
-exec mysqld_safe --datadir=/var/lib/mysql
+exec mysqld_safe

@@ -1,7 +1,8 @@
 FROM debian:bookworm
 
-RUN apt update && apt upgrade -y && \
+RUN apt update -y && apt upgrade -y && \
 	apt install -y \
+	php7.3 \
 	php-fpm \
 	php-mysql \
 	curl \
