@@ -16,5 +16,7 @@ clean:
 
 fclean: clean
 	docker system prune -af --volumes
+	sudo rm -rf /home/jodone/data/mariadb/*
+	sudo rm -rf /home/jodone/data/wordpress/*
 
 re: fclean all
