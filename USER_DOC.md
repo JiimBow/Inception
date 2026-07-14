@@ -67,6 +67,9 @@ DOMAIN_NAME=
 WP_ADMIN_USER=
 WP_ADMIN_PASSWORD=
 WP_ADMIN_EMAIL=
+WP_USER=
+WP_USER_PASSWORD=
+WP_USER_EMAIL=
 ```
 
 No passwords are committed on the Git repository.

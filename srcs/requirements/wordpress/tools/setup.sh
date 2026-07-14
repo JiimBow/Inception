@@ -56,8 +56,14 @@ if ! wp core is-installed --allow-root; then
 	--admin_password="$WP_ADMIN_PASSWORD" \
 	--admin_email="$WP_ADMIN_EMAIL" \
 	--skip-email \
-	--allow-root
+	--allow-root \
 
+	wp user create \
+    "$WP_USER" \
+    "$WP_USER_EMAIL" \
+    --user_pass="$WP_USER_PASSWORD" \
+    --role=author \
+    --allow-root
 	echo "WordPress installed."
 fi
 

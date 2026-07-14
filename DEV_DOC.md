@@ -78,13 +78,16 @@ Example configuration:
 ```
 MYSQL_ROOT_PASSWORD=<your_root_password>
 MYSQL_DATABASE=wordpress
-MYSQL_USER=<wpuser>
+MYSQL_USER=<username>
 MYSQL_PASSWORD=<your_password>
 
 DOMAIN_NAME=<login>.42.fr
 WP_ADMIN_USER=<adminuser> (That can't containt "admin/Admin" or "administrator/Administrator")
 WP_ADMIN_PASSWORD=<your_admin_password>
 WP_ADMIN_EMAIL=admin@42.fr
+WP_USER=<username>
+WP_USER_PASSWORD=<user_password>
+WP_USER_EMAIL=user@42.fr
 ```
 
 Real password must not be committed on the git repository.

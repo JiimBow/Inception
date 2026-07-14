@@ -1,9 +1,15 @@
 NAME = inception
 
+DATA_PATH = /home/jodone/data
+
 COMPOSE = docker compose -f srcs/docker-compose.yml
 
-all:
+all: create_dirs
 	$(COMPOSE) up --build -d
+
+create_dirs:
+	mkdir -p $(DATA_PATH)/mariadb
+	mkdir -p $(DATA_PATH)/wordpress
 
 up:
 	$(COMPOSE) up -d
